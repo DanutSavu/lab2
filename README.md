@@ -30,12 +30,12 @@ ApplyDiscount -.->|<<extend>>| BuyTicket
 CancelTicket -.->|<<extend>>| BuyTicket
 ```
 
-## Actors
+Actors
 
 * Client
 * Admin
 
-## Main Use Cases
+Main Use Cases
 
 Customer can:
 
@@ -48,7 +48,7 @@ Admin can:
 * Add movies
 * Remove movies
 
-## Relationships
+Relationships
 
 * **Buy Ticket <<include>> Select Seat**
 * **Buy Ticket <<include>> Process Payment**

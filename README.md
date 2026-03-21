@@ -1,4 +1,4 @@
-# 🎬 Cinema Use Case Diagram
+Cinema Use Case Diagram
 
 This project represents a simple **Cinema System** using UML Use Case Diagram.
 

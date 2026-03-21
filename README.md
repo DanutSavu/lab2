@@ -30,7 +30,7 @@ ApplyDiscount -.->|<<extend>>| BuyTicket
 CancelTicket -.->|<<extend>>| BuyTicket
 ```
 
-Actors
+**Actors
 
 * Client
 * Admin
@@ -43,7 +43,7 @@ Customer can:
 * Buy tickets
 * Cancel tickets
 
-Admin can:
+**Admin can:
 
 * Add movies
 * Remove movies

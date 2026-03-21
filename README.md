@@ -1,7 +1,20 @@
-# Cinema Use Case Diagram
+Cinema System - Use Case Diagram
 
 ```mermaid
-flowchart TD
+flowchart LR
+
+Customer((Customer))
+Admin((Admin))
+
+ViewMovies[View Movies]
+BuyTicket[Buy Ticket]
+SelectSeat[Select Seat]
+ProcessPayment[Process Payment]
+ApplyDiscount[Apply Discount]
+CancelTicket[Cancel Ticket]
+
+AddMovie[Add Movie]
+RemoveMovie[Remove Movie]
 
 Customer --> ViewMovies
 Customer --> BuyTicket
@@ -10,30 +23,35 @@ Customer --> CancelTicket
 Admin --> AddMovie
 Admin --> RemoveMovie
 
-BuyTicket --> SelectSeat
-BuyTicket --> ProcessPayment
+BuyTicket -->|<<include>>| SelectSeat
+BuyTicket -->|<<include>>| ProcessPayment
 
-ApplyDiscount -.-> BuyTicket
+ApplyDiscount -.->|<<extend>>| BuyTicket
+CancelTicket -.->|<<extend>>| BuyTicket
 ```
 
-## Explanation
-
-Actors:
+## Actors
 
 * Customer
 * Admin
 
-Use Cases:
+## Main Use Cases
 
-* View Movies
-* Buy Ticket
-* Cancel Ticket
-* Add Movie
-* Remove Movie
+Customer can:
 
-Relationships:
+* View movies
+* Buy tickets
+* Cancel tickets
 
-* Buy Ticket **includes** Select Seat
-* Buy Ticket **includes** Process Payment
-* Apply Discount **extends** Buy Ticket
+Admin can:
+
+* Add movies
+* Remove movies
+
+## Relationships
+
+* **Buy Ticket <<include>> Select Seat**
+* **Buy Ticket <<include>> Process Payment**
+* **Apply Discount <<extend>> Buy Ticket**
+* **Cancel Ticket <<extend>> Buy Ticket**
 

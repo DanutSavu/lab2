@@ -1,57 +1,31 @@
-Cinema System - Use Case Diagram
+# 🎬 Cinema Use Case Diagram
 
-```mermaid
-flowchart LR
+This project represents a simple **Cinema System** using UML Use Case Diagram.
 
-Client((Client))
-Admin((Admin))
-
-ViewMovies[View Movies]
-BuyTicket[Buy Ticket]
-SelectSeat[Select Seat]
-ProcessPayment[Process Payment]
-ApplyDiscount[Apply Discount]
-CancelTicket[Cancel Ticket]
-
-AddMovie[Add Movie]
-RemoveMovie[Remove Movie]
-
-Client --> ViewMovies
-Client --> BuyTicket
-Client --> CancelTicket
-
-Admin --> AddMovie
-Admin --> RemoveMovie
-
-BuyTicket -->|<<include>>| SelectSeat
-BuyTicket -->|<<include>>| ProcessPayment
-
-ApplyDiscount -.->|<<extend>>| BuyTicket
-CancelTicket -.->|<<extend>>| BuyTicket
-```
-
-**Actors
+## Actors
 
 * Client
 * Admin
 
-Main Use Cases
+## Use Cases
 
-Customer can:
+Client can:
 
-* View movies
-* Buy tickets
-* Cancel tickets
+* View Movies
+* Buy Ticket
+* Cancel Ticket
 
-**Admin can:
+Admin can:
 
-* Add movies
-* Remove movies
+* Add Movie
+* Remove Movie
 
-Relationships
+## Relationships
 
-* **Buy Ticket <<include>> Select Seat**
-* **Buy Ticket <<include>> Process Payment**
-* **Apply Discount <<extend>> Buy Ticket**
-* **Cancel Ticket <<extend>> Buy Ticket**
+* Buy Ticket **<<include>>** Select Seat
+* Buy Ticket **<<include>>** Process Payment
+* Apply Discount **<<extend>>** Buy Ticket
 
+## Diagram
+
+![Cinema UML Diagram](cinema-diagram.png)

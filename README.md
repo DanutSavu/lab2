@@ -3,22 +3,22 @@ Cinema Use Case Diagram
 ```mermaid
 flowchart LR
 
-Client((Client))
-Admin((Admin))
+Customer((👤 Customer))
+Admin((👤 Admin))
 
-ViewMovies((View Movies))
-BuyTicket((Buy Ticket))
-CancelTicket((Cancel Ticket))
-SelectSeat((Select Seat))
-ProcessPayment((Process Payment))
-ApplyDiscount((Apply Discount))
+ViewMovies[View Movies]
+BuyTicket[Buy Ticket]
+SelectSeat[Select Seat]
+ProcessPayment[Process Payment]
+ApplyDiscount[Apply Discount]
+CancelTicket[Cancel Ticket]
 
-AddMovie((Add Movie))
-RemoveMovie((Remove Movie))
+AddMovie[Add Movie]
+RemoveMovie[Remove Movie]
 
-Client --> ViewMovies
-Client --> BuyTicket
-Client --> CancelTicket
+Customer --> ViewMovies
+Customer --> BuyTicket
+Customer --> CancelTicket
 
 Admin --> AddMovie
 Admin --> RemoveMovie
@@ -27,5 +27,6 @@ BuyTicket -->|<<include>>| SelectSeat
 BuyTicket -->|<<include>>| ProcessPayment
 
 ApplyDiscount -.->|<<extend>>| BuyTicket
+CancelTicket -.->|<<extend>>| BuyTicket
 ```
 

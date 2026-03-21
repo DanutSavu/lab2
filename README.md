@@ -3,7 +3,7 @@ Cinema System - Use Case Diagram
 ```mermaid
 flowchart LR
 
-Customer((Customer))
+Client((Client))
 Admin((Admin))
 
 ViewMovies[View Movies]
@@ -16,9 +16,9 @@ CancelTicket[Cancel Ticket]
 AddMovie[Add Movie]
 RemoveMovie[Remove Movie]
 
-Customer --> ViewMovies
-Customer --> BuyTicket
-Customer --> CancelTicket
+Client --> ViewMovies
+Client --> BuyTicket
+Client --> CancelTicket
 
 Admin --> AddMovie
 Admin --> RemoveMovie
@@ -32,7 +32,7 @@ CancelTicket -.->|<<extend>>| BuyTicket
 
 ## Actors
 
-* Customer
+* Client
 * Admin
 
 ## Main Use Cases

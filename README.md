@@ -1,23 +1,24 @@
 ```mermaid
 sequenceDiagram
     participant C as Client
-    participant A as AuthController
-    participant U as UserService
-    participant R as UserRepository
+    participant TC as TicketController
+    participant TS as TicketService
+    participant DS as DiscountService
+    participant PS as PaymentSystem
 
-    C->>A: login(email,password)
-    A->>U: validateCredentials()
-    U->>R: findUserByEmail()
+    C->>TC: buyTicket(movie, seat)
+    TC->>TS: createTicket()
 
-    alt user valid
-        R-->>U: User
-        U-->>A: JWT token
-        A-->>C: Login Success
-    else invalid credentials
-        U-->>A: Unauthorized
-        A-->>C: 401 Error
-    end
+    TS->>DS: applyDiscount()
+    DS-->>TS: discountApplied
+
+    TS->>PS: processPayment()
+    PS-->>TS: paymentConfirmed
+
+    TS-->>TC: ticketCreated
+    TC-->>C: Ticket Confirmed
 ```
+
 
 
 

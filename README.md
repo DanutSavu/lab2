@@ -1,121 +1,87 @@
 ```mermaid
 sequenceDiagram
+
     participant C as Client
-    participant T as TicketController
-    participant S as TicketService
-    participant R as TicketRepository
-    participant D as DiscountService
+    participant A as Admin
+    participant Auth as AuthController
+    participant MovieC as MovieController
+    participant TicketC as TicketController
+    participant UserS as UserService
+    participant MovieS as MovieService
+    participant TicketS as TicketService
+    participant DiscS as DiscountService
+    participant Repo as Repository
 
-    C->>T: POST /buyTicket(movieId, seat, discountCode)
-    T->>S: buyTicket(movieId, seat, discountCode)
+    %% LOGIN
+    C->>Auth: POST /login(email,password)
+    Auth->>UserS: validateCredentials()
+    UserS->>Repo: findUserByEmail()
 
-    S->>D: validateDiscount(discountCode)
-
-    alt discount valid
-        D-->>S: discount applied
-    else invalid discount
-        D-->>S: no discount
+    alt credentials valid
+        Repo-->>UserS: User
+        UserS-->>Auth: JWT Token
+        Auth-->>C: 200 OK
+    else invalid credentials
+        UserS-->>Auth: UnauthorizedException
+        Auth-->>C: 401 Unauthorized
     end
 
-    S->>R: saveTicket(ticket)
-    R-->>S: ticket saved
+    %% BUY TICKET
+    C->>TicketC: POST /buyTicket(movieId, seat, discountCode)
+    TicketC->>TicketS: buyTicket()
 
-    S-->>T: TicketConfirmation
-    T-->>C: 200 OK
-```
+    TicketS->>DiscS: validateDiscount()
 
----
+    alt discount valid
+        DiscS-->>TicketS: discount applied
+    else invalid discount
+        DiscS-->>TicketS: no discount
+    end
 
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant T as TicketController
-    participant S as TicketService
-    participant R as TicketRepository
+    TicketS->>Repo: saveTicket()
+    Repo-->>TicketS: ticket saved
+    TicketS-->>TicketC: confirmation
+    TicketC-->>C: Ticket purchased
 
-    C->>T: DELETE /cancelTicket(ticketId)
-    T->>S: cancelTicket(ticketId)
+    %% CANCEL TICKET
+    C->>TicketC: DELETE /cancelTicket(ticketId)
+    TicketC->>TicketS: cancelTicket()
 
-    S->>R: findTicket(ticketId)
+    TicketS->>Repo: findTicket()
 
     alt ticket exists
-        R-->>S: Ticket
-        S->>R: deleteTicket(ticketId)
-        S-->>T: TicketCancelled
-    else ticket not found
-        S-->>T: throw NotFoundException()
+        Repo-->>TicketS: Ticket
+        TicketS->>Repo: deleteTicket()
+        TicketS-->>TicketC: Ticket cancelled
+        TicketC-->>C: 200 OK
+    else not found
+        TicketS-->>TicketC: NotFoundException
+        TicketC-->>C: 404 Error
     end
 
-    T-->>C: 200 OK / 404 Not Found
-```
+    %% ADMIN ADD MOVIE
+    A->>MovieC: POST /addMovie(movieData)
+    MovieC->>MovieS: addMovie()
+    MovieS->>Repo: saveMovie()
+    Repo-->>MovieS: Movie saved
+    MovieS-->>MovieC: Success
+    MovieC-->>A: 201 Created
 
----
-
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant D as DiscountController
-    participant S as DiscountService
-    participant R as DiscountRepository
-
-    C->>D: POST /applyDiscount(code)
-    D->>S: applyDiscount(code)
-
-    S->>R: findDiscount(code)
-
-    alt discount valid
-        R-->>S: Discount
-        S-->>D: DiscountApplied
-    else invalid code
-        S-->>D: throw InvalidDiscountException()
-    end
-
-    D-->>C: 200 OK / 400 Bad Request
-```
-
----
-
-```mermaid
-sequenceDiagram
-    participant A as Admin
-    participant M as MovieController
-    participant S as MovieService
-    participant R as MovieRepository
-
-    A->>M: POST /addMovie(movieData)
-    M->>S: addMovie(movieData)
-
-    S->>R: saveMovie(movie)
-
-    R-->>S: MovieSaved
-    S-->>M: Success
-
-    M-->>A: 201 Created
-```
-
----
-
-```mermaid
-sequenceDiagram
-    participant A as Admin
-    participant M as MovieController
-    participant S as MovieService
-    participant R as MovieRepository
-
-    A->>M: DELETE /deleteMovie(movieId)
-    M->>S: deleteMovie(movieId)
-
-    S->>R: findMovie(movieId)
+    %% ADMIN DELETE MOVIE
+    A->>MovieC: DELETE /deleteMovie(movieId)
+    MovieC->>MovieS: deleteMovie()
+    MovieS->>Repo: findMovie()
 
     alt movie exists
-        R-->>S: Movie
-        S->>R: deleteMovie(movieId)
-        S-->>M: MovieDeleted
+        Repo-->>MovieS: Movie
+        MovieS->>Repo: deleteMovie()
+        MovieS-->>MovieC: Movie deleted
+        MovieC-->>A: 200 OK
     else movie not found
-        S-->>M: throw NotFoundException()
+        MovieS-->>MovieC: NotFoundException
+        MovieC-->>A: 404 Error
     end
-
-    M-->>A: 200 OK / 404 Not Found
 ```
+
 
 

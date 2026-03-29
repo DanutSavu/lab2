@@ -1,29 +1,21 @@
 ```mermaid
 sequenceDiagram
+    participant C as Client
+    participant A as AuthController
+    participant U as UserService
+    participant R as UserRepository
 
-    participant Client
-    participant CinemaSystem
-    participant PaymentSystem
-    participant Admin
+    C->>A: login(email,password)
+    A->>U: validateCredentials()
+    U->>R: findUserByEmail()
 
-    %% Client vede filme
-    Client->>CinemaSystem: viewMovies()
-
-    %% Cumpara bilet
-    Client->>CinemaSystem: buyTicket(movie)
-    CinemaSystem->>CinemaSystem: selectSeat()
-    CinemaSystem->>CinemaSystem: applyDiscount()
-    CinemaSystem->>PaymentSystem: processPayment()
-    PaymentSystem-->>CinemaSystem: paymentConfirmed
-    CinemaSystem-->>Client: ticketConfirmed
-
-    %% Anuleaza bilet
-    Client->>CinemaSystem: cancelTicket()
-    CinemaSystem-->>Client: ticketCancelled
-
-    %% Admin adauga film
-    Admin->>CinemaSystem: addMovie()
-
-    %% Admin sterge film
-    Admin->>CinemaSystem: deleteMovie()
+    alt user valid
+        R-->>U: User
+        U-->>A: JWT Token
+        A-->>C: Login Success
+    else invalid credentials
+        U-->>A: Unauthorized
+        A-->>C: 401 Error
+    end
 ```
+

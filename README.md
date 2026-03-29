@@ -1,21 +1,22 @@
 ```mermaid
 sequenceDiagram
     participant C as Client
-    participant A as AuthController
-    participant U as UserService
-    participant R as UserRepository
+    participant OC as OrderController
+    participant OS as OrderService
+    participant SS as StockService
+    participant PS as PaymentService
 
-    C->>A: login(email,password)
-    A->>U: validateCredentials()
-    U->>R: findUserByEmail()
+    C->>OC: placeOrder(products)
+    OC->>OS: createOrder()
 
-    alt user valid
-        R-->>U: User
-        U-->>A: JWT Token
-        A-->>C: Login Success
-    else invalid credentials
-        U-->>A: Unauthorized
-        A-->>C: 401 Error
-    end
+    OS->>SS: checkStock()
+    SS-->>OS: stockAvailable
+
+    OS->>PS: processPayment()
+    PS-->>OS: paymentConfirmed
+
+    OS-->>OC: orderCreated
+    OC-->>C: Order Confirmed
 ```
+
 
